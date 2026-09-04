@@ -1,11 +1,9 @@
 using backend.Enums;
 
-namespace backend.Models;
+namespace backend.DTOs;
 
-public class Contact
+public class UpdateContactDto
 {
-    public int Id { get; set; }
-
     public ContactType ContactType { get; set; }
 
     public string Name { get; set; } = string.Empty;
@@ -23,8 +21,4 @@ public class Contact
     public string? Industry { get; set; }
 
     public ContactStatus Status { get; set; }
-
-    public DateTime CreatedAt { get; set; }
-
-    public DateTime UpdatedAt { get; set; }
 }

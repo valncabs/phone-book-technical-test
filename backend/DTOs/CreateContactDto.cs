@@ -1,10 +1,14 @@
+using backend.Enums;
+
 namespace backend.DTOs;
 
 public class CreateContactDto
 {
-    public string ContactType { get; set; } = string.Empty;
+    public ContactType ContactType { get; set; }
 
     public string Name { get; set; } = string.Empty;
+
+    public string LastName { get; set; } = string.Empty;
 
     public string PhoneNumber { get; set; } = string.Empty;
 
