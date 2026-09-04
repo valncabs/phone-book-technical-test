@@ -33,12 +33,14 @@ public class ContactController : ControllerBase
 
         if (contact == null)
         {
-            return NotFound();
+            return NotFound(new
+            {
+                message = $"No se encontró un contacto activo con el ID {id}."
+            });
         }
 
         return Ok(contact);
     }
-
 
     // POST: api/contact
     [HttpPost]
@@ -46,7 +48,11 @@ public class ContactController : ControllerBase
     {
         var contact = await _service.CreateAsync(dto);
 
-        return Ok(contact);
+        return Ok(new
+        {
+            message = "El contacto fue creado correctamente.",
+            data = contact
+        });
     }
 
     // PUT: api/contact/{id}
@@ -59,9 +65,36 @@ public class ContactController : ControllerBase
 
         if (contact == null)
         {
-            return NotFound();
+            return NotFound(new
+            {
+                message = $"No se encontró un contacto activo con el ID {id}."
+            });
         }
 
-        return Ok(contact);
+        return Ok(new
+        {
+            message = "El contacto fue actualizado correctamente.",
+            data = contact
+        });
+    }
+
+    // DELETE: api/contact/{id}
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var deleted = await _service.SoftDeleteAsync(id);
+
+        if (!deleted)
+        {
+            return NotFound(new
+            {
+                message = $"No se encontró un contacto activo con el ID {id}. " + "Es posible que ya haya sido eliminado."
+            });
+        }
+
+        return Ok(new
+        {
+            message = "El contacto fue eliminado correctamente."
+        });
     }
 }

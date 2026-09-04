@@ -12,4 +12,5 @@ public interface IContactService
     Task<Contact?> GetByIdAsync(int id);
 
     Task<Contact?> UpdateAsync(int id, UpdateContactDto dto);
+    Task<bool> SoftDeleteAsync(int id);
 }

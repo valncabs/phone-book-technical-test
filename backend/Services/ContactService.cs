@@ -69,4 +69,8 @@ public class ContactService : IContactService
 
         return await _repository.UpdateAsync(contact);
     }
+    public async Task<bool> SoftDeleteAsync(int id)
+    {
+        return await _repository.SoftDeleteAsync(id);
+    }
 }
