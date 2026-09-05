@@ -131,4 +131,47 @@ export class ContactList implements OnInit {
     }
   );
 }
+
+openEditModal(contact: Contact): void {
+  const modalRef = this.modalService.open(ContactFormModal);
+
+  modalRef.componentInstance.contact = contact;
+
+  modalRef.componentInstance.formData = {
+    contactType: contact.contactType,
+    name: contact.name,
+    lastName: contact.lastName,
+    phoneNumber: contact.phoneNumber,
+    comments: contact.comments,
+    email: contact.email || '',
+    governmentLevel: contact.governmentLevel || '',
+    industry: contact.industry || ''
+  };
+
+  modalRef.result.then(
+    (result) => {
+      console.log('Contact to update:', result);
+
+      this.contactService.update(contact.id, result).subscribe({
+        next: (response) => {
+          console.log('Contact updated:', response);
+
+          this.loadContacts();
+        },
+
+        error: (error) => {
+          console.error('ERROR UPDATING CONTACT:', error);
+
+          this.errorMessage = 'Could not update contact.';
+          this.cdr.detectChanges();
+        }
+      });
+    },
+
+    () => {
+      console.log('Modal dismissed');
+    }
+  );
+}
+
 }
