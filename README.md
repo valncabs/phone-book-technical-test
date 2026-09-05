@@ -159,7 +159,7 @@ Updates the information of an active contact.
 
 ### Delete Contact
 
-```http
+```http 
 DELETE /api/contact/{id}
 ```
 
