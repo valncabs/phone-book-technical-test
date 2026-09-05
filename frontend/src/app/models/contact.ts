@@ -15,7 +15,7 @@ export type ContactStatus = | 'Active' | 'Inactive';
         id: number;
         contactType: ContactType;
         name: string;
-        lastName: string;
+        lastName?: string;
         phoneNumber: string;
         comments: string;
         email?: string;
@@ -32,7 +32,7 @@ export type ContactStatus = | 'Active' | 'Inactive';
     export interface CreateContact {
         contactType: ContactType;
         name: string;
-        lastName: string;
+        lastName?: string;
         phoneNumber: string;
         comments: string;
         email?: string;
@@ -46,7 +46,7 @@ export type ContactStatus = | 'Active' | 'Inactive';
     export interface UpdateContact {
         contactType: ContactType;
         name: string;
-        lastName: string;
+        lastName?: string;
         phoneNumber: string;
         comments: string;
         email?: string;

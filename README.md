@@ -354,24 +354,6 @@ If the contact does not exist or is inactive, the API returns:
 POST /api/contact
 ```
 
-Creates a new contact.
-
-Example request:
-
-```json
-{
-  "contactType": "PublicOrganization",
-  "name": "Reynaldo",
-  "lastName": "Cabas",
-  "phoneNumber": "322 6422918",
-  "comments": "Contacto de prueba",
-  "email": "rey@gmail.com",
-  "governmentLevel": "Internacional",
-  "industry": "comercial"
-}
-```
-
----
 
 ## Update Contact
 
