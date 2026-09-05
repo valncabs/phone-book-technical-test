@@ -61,4 +61,12 @@ public class ContactRepository : IContactRepository
 
         return true;
     }
+    public async Task<bool> EmailExistsAsync(string email)
+    {
+        return await _context.Contacts
+            .AnyAsync(c =>
+                c.Email != null &&
+                c.Email.ToLower() == email.ToLower() &&
+                c.Status == ContactStatus.Active);
+    }
 }
