@@ -1,0 +1,147 @@
+
+<div class="modal-header">
+  <h4 class="modal-title">
+    {{ isEditing ? 'Edit Contact' : 'Add Contact' }}
+  </h4>
+</div>
+
+<div class="p-3">
+
+  <!-- Contact Type -->
+  <div class="mb-3">
+    <label for="contactType" class="form-label">
+      Contact Type
+    </label>
+
+    <select
+      id="contactType"
+      class="form-select"
+      [(ngModel)]="formData.contactType">
+
+      <option value="Person">
+        Person
+      </option>
+
+      <option value="PublicOrganization">
+        Public Organization
+      </option>
+
+      <option value="PrivateOrganization">
+        Private Organization
+      </option>
+
+    </select>
+  </div>
+
+  <!-- Name -->
+  <div class="mb-3">
+    <label for="name" class="form-label">
+      Name
+    </label>
+
+    <input
+      id="name"
+      type="text"
+      class="form-control"
+      [(ngModel)]="formData.name">
+  </div>
+
+  <!-- Last Name -->
+  <div class="mb-3">
+    <label for="lastName" class="form-label">
+      Last Name
+    </label>
+
+    <input
+      id="lastName"
+      type="text"
+      class="form-control"
+      [(ngModel)]="formData.lastName">
+  </div>
+
+  <!-- Phone Number -->
+  <div class="mb-3">
+    <label for="phoneNumber" class="form-label">
+      Phone Number
+    </label>
+
+    <input
+      id="phoneNumber"
+      type="text"
+      class="form-control"
+      [(ngModel)]="formData.phoneNumber">
+  </div>
+
+  <!-- Comments -->
+  <div class="mb-3">
+    <label for="comments" class="form-label">
+      Comments
+    </label>
+
+    <textarea
+      id="comments"
+      class="form-control"
+      rows="3"
+      [(ngModel)]="formData.comments">
+    </textarea>
+  </div>
+
+  <!-- Email -->
+  <div class="mb-3">
+    <label for="email" class="form-label">
+      Email
+    </label>
+
+    <input
+      id="email"
+      type="email"
+      class="form-control"
+      [(ngModel)]="formData.email">
+  </div>
+
+  <!-- Government Level -->
+  <div class="mb-3">
+    <label for="governmentLevel" class="form-label">
+      Government Level
+    </label>
+
+    <input
+      id="governmentLevel"
+      type="text"
+      class="form-control"
+      [(ngModel)]="formData.governmentLevel">
+  </div>
+
+  <!-- Industry -->
+  <div class="mb-3">
+    <label for="industry" class="form-label">
+      Industry
+    </label>
+
+    <input
+      id="industry"
+      type="text"
+      class="form-control"
+      [(ngModel)]="formData.industry">
+  </div>
+
+</div>
+
+<div class="modal-footer">
+
+  <button
+    type="button"
+    class="btn btn-secondary"
+    (click)="cancel()">
+    Cancel
+  </button>
+
+  <button
+    type="button"
+    class="btn btn-primary"
+    (click)="save()">
+    Save changes
+  </button>
+
+</div>
+

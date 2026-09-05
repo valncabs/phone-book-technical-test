@@ -4,6 +4,8 @@ import {
   ChangeDetectorRef
 } from '@angular/core';
 
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ContactFormModal } from '../contact-form-modal/contact-form-modal';
 import { CommonModule } from '@angular/common';
 
 import { Contact } from '../../models/contact';
@@ -12,7 +14,9 @@ import { ContactService } from '../../services/contact.service';
 @Component({
   selector: 'app-contact-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule, 
+  ],
   templateUrl: './contact-list.html'
 })
 export class ContactList implements OnInit {
@@ -33,7 +37,8 @@ export class ContactList implements OnInit {
 
   constructor(
     private contactService: ContactService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
@@ -97,4 +102,33 @@ export class ContactList implements OnInit {
         this.selectedContactTypes.filter(type => type !== contactType);
     }
   }
+
+  openAddModal(): void {
+  const modalRef = this.modalService.open(ContactFormModal);
+
+  modalRef.result.then(
+    (result) => {
+      console.log('Contact to create:', result);
+
+      this.contactService.create(result).subscribe({
+        next: (response) => {
+          console.log('Contact created:', response);
+
+          this.loadContacts();
+        },
+
+        error: (error) => {
+          console.error('ERROR CREATING CONTACT:', error);
+
+          this.errorMessage = 'Could not create contact.';
+          this.cdr.detectChanges();
+        }
+      });
+    },
+
+    () => {
+      console.log('Modal dismissed');
+    }
+  );
+}
 }

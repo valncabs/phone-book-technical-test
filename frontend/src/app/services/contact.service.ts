@@ -14,7 +14,7 @@ providedIn: 'root'
 })
 export class ContactService {
 
-private readonly apiUrl = 'http://localhost:5260/api/Contact';
+private readonly apiUrl = 'http://localhost:5260/api/contact';
 
 constructor(private http: HttpClient) {}
 
