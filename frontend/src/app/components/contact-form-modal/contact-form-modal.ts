@@ -1,7 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmModal } from '../confirm-modal/confirm-modal';
 
 import {
 Contact,
@@ -33,7 +34,8 @@ formData: CreateContact = {
 };
 
 constructor(
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private modalService: NgbModal
 ) {}
 
 get isEditing(): boolean {
@@ -41,7 +43,22 @@ get isEditing(): boolean {
 }
 
 save(): void {
-    this.activeModal.close(this.formData);
+  const confirmModal = this.modalService.open(ConfirmModal);
+
+  confirmModal.componentInstance.message = this.isEditing
+    ? 'Are you sure you want to save these changes?'
+    : 'Are you sure you want to create this contact?';
+
+  confirmModal.result.then(
+    (confirmed) => {
+      if (confirmed === true) {
+        this.activeModal.close(this.formData);
+      }
+    },
+    () => {
+      console.log('Confirmation cancelled');
+    }
+  );
 }
 
 cancel(): void {

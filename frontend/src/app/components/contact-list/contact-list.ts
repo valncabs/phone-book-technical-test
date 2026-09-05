@@ -7,7 +7,7 @@ import {
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ContactFormModal } from '../contact-form-modal/contact-form-modal';
 import { CommonModule } from '@angular/common';
-
+import { ConfirmModal } from '../confirm-modal/confirm-modal';
 import { Contact } from '../../models/contact';
 import { ContactService } from '../../services/contact.service';
 
@@ -170,6 +170,40 @@ openEditModal(contact: Contact): void {
 
     () => {
       console.log('Modal dismissed');
+    }
+  );
+}
+
+openDeleteModal(contact: Contact): void {
+  const modalRef = this.modalService.open(ConfirmModal);
+
+  modalRef.componentInstance.message =
+    'Are you sure you want to delete this contact?';
+
+  modalRef.result.then(
+    (result) => {
+      if (result === true) {
+
+        this.contactService.delete(contact.id).subscribe({
+          next: () => {
+            console.log('Contact deleted:', contact.id);
+
+            this.loadContacts();
+          },
+
+          error: (error) => {
+            console.error('ERROR DELETING CONTACT:', error);
+
+            this.errorMessage = 'Could not delete contact.';
+            this.cdr.detectChanges();
+          }
+        });
+
+      }
+    },
+
+    () => {
+      console.log('Delete cancelled');
     }
   );
 }
