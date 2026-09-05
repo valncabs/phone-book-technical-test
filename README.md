@@ -778,7 +778,7 @@ The backend and frontend were developed separately and then integrated into the 
 
 # Technical Summary
 
-This project demonstrates a full-stack CRUD application using:
+This project demonstrates a full-stack CRUD application using: 
 
 ```text
 Angular
