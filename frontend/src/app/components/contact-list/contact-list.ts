@@ -26,6 +26,9 @@ export class ContactList implements OnInit {
   loading = false;
   errorMessage = '';
 
+  currentPage = 1;
+  pageSize = 6;
+
   /**
    * Contact types currently selected in the filters.
    */
@@ -84,6 +87,25 @@ export class ContactList implements OnInit {
       this.selectedContactTypes.includes(contact.contactType)
     );
   }
+
+  get totalPages(): number {
+  return Math.ceil(this.filteredContacts.length / this.pageSize);
+}
+
+get paginatedContacts(): Contact[] {
+  const startIndex = (this.currentPage - 1) * this.pageSize;
+  const endIndex = startIndex + this.pageSize;
+
+  return this.filteredContacts.slice(startIndex, endIndex);
+}
+
+changePage(page: number): void {
+  if (page < 1 || page > this.totalPages) {
+    return;
+  }
+
+  this.currentPage = page;
+}
 
   /**
    * Adds or removes a contact type from the active filters.
