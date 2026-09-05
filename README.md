@@ -1,110 +1,150 @@
 # Phone Book Technical Test
 
-REST API for managing contacts in a phone book, developed as part of a technical assessment for an FMS fleet management platform.
+Web-based phone book application developed as part of the GUDAR DEVS Developer Competency Test.
+
+The application consists of an Angular frontend connected to a REST API developed with ASP.NET Core, using PostgreSQL and Entity Framework Core for data persistence.
+
+---
 
 ## Author
 
 **Valentina Cabas**
 
+---
+
 ## Technologies
 
-* **C# / ASP.NET Core**
+### Backend
+
+* **C#**
+* **ASP.NET Core**
 * **Entity Framework Core**
 * **PostgreSQL**
 * **Npgsql**
 * **Swagger / OpenAPI**
-* **Git / GitHub**
 
-## Architecture
+### Frontend
 
-The project uses a layered architecture to separate responsibilities:
+* **Angular**
+* **TypeScript**
+* **Bootstrap 5**
+* **ng-bootstrap**
+
+### Tools
+
+* **Git**
+* **GitHub**
+* **Visual Studio Code**
+
+---
+
+## Project Structure
+
+The project is divided into two main applications:
 
 ```text
-C:.
-
-│   .gitignore
-│   appsettings.Development.json
-│   appsettings.json
-│   backend.csproj
-│   backend.http
-│   Program.cs
+phone-book-technical-test/
 │
-├───Controllers
-│       ContactsController.cs
+├── backend/
+│   ├── Controllers/
+│   ├── Data/
+│   ├── DTOs/
+│   ├── Enums/
+│   ├── Migrations/
+│   ├── Models/
+│   ├── Repositories/
+│   │   └── Interfaces/
+│   ├── Services/
+│   │   └── Interfaces/
+│   ├── Properties/
+│   ├── Program.cs
+│   ├── appsettings.json
+│   └── backend.csproj
 │
-├───Data
-│       AppDbContext.cs
+├── frontend/
+│   ├── src/
+│   │   └── app/
+│   │       ├── components/
+│   │       ├── models/
+│   │       ├── services/
+│   │       └── ...
+│   ├── angular.json
+│   ├── package.json
+│   └── tsconfig.json
 │
-├───DTOs
-│       CreateContactDto.cs
-│       UpdateContactDto.cs
-│
-├───Enums
-│       ContactStatus.cs
-│       ContactType.cs
-│
-├───Migrations
-│
-├───Models
-│       Contact.cs
-│
-├───Properties
-│       launchSettings.json
-│
-├───Repositories
-│   │   ContactRepository.cs
-│   │
-│   └───Interfaces
-│           IContactRepository.cs
-│
-└───Services
-    │   ContactService.cs
-    │
-    └───Interfaces
-            IContactService.cs
+└── README.md
 ```
 
-### Application Flow
+---
+
+# Architecture
+
+The application follows a layered architecture on the backend.
 
 ```text
-HTTP Request
-     ↓
+Angular Frontend
+       ↓
+REST API
+       ↓
 Controller
-     ↓
+       ↓
 Service
-     ↓
+       ↓
 Repository
-     ↓
+       ↓
 Entity Framework Core
-     ↓
+       ↓
 PostgreSQL
 ```
 
-Each layer has a specific responsibility:
+### Backend Responsibilities
 
-* **Controller:** receives HTTP requests and returns responses.
-* **Service:** contains the business logic.
-* **Repository:** handles database access.
-* **DTOs:** define the data received when creating and updating contacts.
-* **Models:** represent the application's entities.
-* **Data:** contains the Entity Framework Core configuration.
+**Controller**
 
-## Features
+Receives HTTP requests and returns HTTP responses.
 
-The API currently supports:
+**Service**
 
-* Retrieve all active contacts.
-* Retrieve a contact by ID.
-* Create contacts.
-* Update contacts.
-* Delete contacts using **Soft Delete**.
-* Manage contact types using enums.
-* Manage `Active` and `Inactive` statuses.
-* Document and test endpoints using Swagger.
+Contains the application's business logic and validation rules.
 
-### Contact Types
+**Repository**
 
-The API supports three contact types:
+Handles database operations through Entity Framework Core.
+
+**DTOs**
+
+Define the data received when creating and updating contacts.
+
+**Models**
+
+Represent the application's database entities.
+
+**Data**
+
+Contains the Entity Framework Core `DbContext` configuration.
+
+---
+
+# Features
+
+## Contact Management
+
+The application supports the complete CRUD workflow:
+
+* Retrieve contacts
+* Retrieve a contact by ID
+* Create contacts
+* Edit contacts
+* Delete contacts
+* Soft delete
+* Filter contacts by type
+* Paginate contacts
+
+---
+
+## Contact Types
+
+The application supports three contact types:
 
 ```text
 Person
@@ -112,20 +152,177 @@ PublicOrganization
 PrivateOrganization
 ```
 
-### Contact Status
+The user can select any combination of contact types using the filters.
+
+Examples:
 
 ```text
-Active
-Inactive
+Person
 ```
 
-Deleted contacts are not physically removed from the database. Instead, their status is changed from `Active` to `Inactive`.
+```text
+Person + PublicOrganization
+```
 
-Inactive contacts are not returned in normal queries.
+```text
+PublicOrganization + PrivateOrganization
+```
 
-## Endpoints
+```text
+Person + PublicOrganization + PrivateOrganization
+```
 
-### Get Contacts
+---
+
+## Contact Information
+
+Contacts can contain the following information:
+
+```text
+ContactType
+Name
+LastName
+PhoneNumber
+Comments
+Email
+GovernmentLevel
+Industry
+```
+
+The additional fields allow the application to store information relevant to different contact types.
+
+---
+
+# Frontend
+
+The frontend is implemented completely with Angular.
+
+Server-side rendering is not used.
+
+## Frontend Features
+
+### Contact Data Grid
+
+The main page displays contacts in a data grid with:
+
+* Contact Type
+* Name
+* Last Name
+* Phone Number
+* Comments
+* Email
+* Government Level
+* Industry
+* Edit
+* Delete
+
+### Add Contact
+
+The **+ Add Contact** button opens an Angular modal containing the contact form.
+
+The form allows the user to enter:
+
+* Contact type
+* Name
+* Last name
+* Phone number
+* Comments
+* Email
+* Government level
+* Industry
+
+Before creating the contact, the application displays a confirmation modal.
+
+### Edit Contact
+
+The **Edit** button opens the same modal with the selected contact's information already loaded.
+
+After modifying the information, the user can save the changes or cancel.
+
+A confirmation dialog is displayed before applying the update.
+
+### Delete Contact
+
+The **Delete** button opens a confirmation modal.
+
+The user can choose:
+
+```text
+Yes
+No
+```
+
+Selecting **Yes** sends the delete request to the API.
+
+Selecting **No** closes the confirmation dialog without deleting the contact.
+
+### Filtering
+
+Contacts can be filtered by contact type using checkboxes.
+
+Multiple contact types can be selected at the same time.
+
+### Pagination
+
+The contact list includes client-side pagination.
+
+The current implementation displays five contacts per page.
+
+The user can navigate using:
+
+```text
+Previous
+Next
+```
+
+### Frontend Validation
+
+The contact form validates required information before sending requests to the API.
+
+The following fields are required:
+
+* Name
+* Last Name
+* Phone Number
+
+Email format is also validated when an email is provided.
+
+---
+
+# Modals
+
+The application uses **ng-bootstrap** for modal dialogs.
+
+Two modal components are used:
+
+```text
+ContactFormModal
+ConfirmModal
+```
+
+`ContactFormModal` is used for creating and editing contacts.
+
+`ConfirmModal` is used to confirm actions such as creating, updating, and deleting contacts.
+
+---
+
+# Backend
+
+The backend is implemented using ASP.NET Core and exposes a REST API consumed by the Angular frontend.
+
+The API is responsible for:
+
+* Contact management
+* Business logic
+* Validation
+* Database operations
+* Soft deletion
+
+---
+
+# API Endpoints
+
+## Get Contacts
 
 ```http
 GET /api/contact
@@ -133,7 +330,9 @@ GET /api/contact
 
 Returns all active contacts.
 
-### Get Contact by ID
+---
+
+## Get Contact by ID
 
 ```http
 GET /api/contact/{id}
@@ -141,43 +340,86 @@ GET /api/contact/{id}
 
 Returns an active contact by its ID.
 
-If the contact does not exist or is inactive, the API returns `404 Not Found`.
+If the contact does not exist or is inactive, the API returns:
 
-### Create Contact
+```text
+404 Not Found
+```
+
+---
+
+## Create Contact
 
 ```http
 POST /api/contact
 ```
 
-### Update Contact
+Creates a new contact.
+
+Example request:
+
+```json
+{
+  "contactType": "PublicOrganization",
+  "name": "Reynaldo",
+  "lastName": "Cabas",
+  "phoneNumber": "322 6422918",
+  "comments": "Contacto de prueba",
+  "email": "rey@gmail.com",
+  "governmentLevel": "Internacional",
+  "industry": "comercial"
+}
+```
+
+---
+
+## Update Contact
 
 ```http
 PUT /api/contact/{id}
 ```
 
-Updates the information of an active contact.
+Updates an existing active contact.
 
-### Delete Contact
+---
 
-```http 
+## Delete Contact
+
+```http
 DELETE /api/contact/{id}
 ```
 
-Performs a **Soft Delete**, changing the contact status to `Inactive`.
+Deletes a contact using soft delete.
 
-![alt text](image-1.png)
+The record is not physically removed from PostgreSQL. Instead, its status changes from:
 
-## Database
+```text
+Active
+```
 
-The project uses PostgreSQL together with Entity Framework Core.
+to:
 
-The main entity is:
+```text
+Inactive
+```
+
+Inactive contacts are excluded from normal queries.
+
+---
+
+# Database
+
+The application uses **PostgreSQL** as its relational database.
+
+Entity Framework Core is used as the data access technology.
+
+The main database entity is:
 
 ```text
 Contacts
 ```
 
-Some of its main fields are:
+Main fields include:
 
 ```text
 Id
@@ -194,59 +436,150 @@ CreatedAt
 UpdatedAt
 ```
 
-The `ContactType` and `ContactStatus` enums are stored as text in PostgreSQL to keep their values readable.
+The application uses migrations to create and update the database schema.
 
-![alt text](image.png)
+---
 
-## Project Setup and Execution
+# Validation
 
-### 1. Clone the Repository
+Validation is implemented on both the frontend and backend.
 
-Clone the repository from GitHub:
+## Frontend
+
+The Angular form validates:
+
+* Required name
+* Required last name
+* Required phone number
+* Email format
+
+## Backend
+
+The API validates incoming DTOs and applies business rules.
+
+The application also checks that an active contact does not already use the same email address.
+
+Email comparison is case-insensitive.
+
+---
+
+# Soft Delete
+
+The application uses soft deletion instead of physically removing contacts from the database.
+
+When a contact is deleted:
+
+```text
+Status = Inactive
+```
+
+The record remains in PostgreSQL, but inactive contacts are not returned by the normal contact queries.
+
+This approach preserves historical data while keeping deleted contacts out of the active phone book.
+
+---
+
+# CORS
+
+The backend is configured to allow requests from the Angular development application.
+
+The Angular application runs by default on:
+
+```text
+http://localhost:4200
+```
+
+The ASP.NET Core API runs by default on:
+
+```text
+http://localhost:5260
+```
+
+---
+
+# Screenshots
+
+## Phone Book Application
+
+The Angular application provides the main contact grid, filters, pagination, and CRUD actions.
+
+![alt text](image-2.png)
+
+## Database
+
+Example PostgreSQL database structure and contact records.
+
+![Database](image.png)
+
+## Swagger
+
+The REST API can be inspected and tested using Swagger/OpenAPI.
+
+![Swagger](image-1.png)
+
+---
+
+# Project Setup and Execution
+
+## Prerequisites
+
+Make sure the following software is installed:
+
+* .NET SDK
+* Node.js
+* Angular CLI
+* PostgreSQL
+* Git
+
+---
+
+# Backend Setup
+
+## 1. Clone the Repository
 
 ```powershell
 git clone https://github.com/valncabs/phone-book-technical-test.git
 ```
 
-Navigate to the project folder:
+Navigate to the project:
 
 ```powershell
 cd phone-book-technical-test
 ```
 
-### 2. Navigate to the Backend
+---
+
+## 2. Navigate to the Backend
 
 ```powershell
 cd backend
 ```
 
-### 3. Verify the Requirements
+---
 
-Make sure the .NET SDK is installed:
+## 3. Verify .NET
 
 ```powershell
 dotnet --version
 ```
 
-PostgreSQL must also be installed and running.
+---
 
-### 4. Create the Database
+## 4. Configure PostgreSQL
 
-Using PostgreSQL or pgAdmin, create a database named:
+Create a PostgreSQL database named:
 
 ```text
 phonebook
 ```
 
-### 5. Configure the PostgreSQL Connection
-
-Open:
+Configure the connection string in:
 
 ```text
 backend/appsettings.json
 ```
 
-Configure the connection string:
+Example:
 
 ```json
 {
@@ -256,33 +589,39 @@ Configure the connection string:
 }
 ```
 
-Replace `YOUR_PASSWORD` with the password configured for your PostgreSQL user.
+Replace:
 
-> For security reasons, real passwords should not be committed to the repository.
+```text
+YOUR_PASSWORD
+```
 
-### 6. Restore Dependencies
+with the password configured for your PostgreSQL user.
 
-From the `backend` folder, run:
+For security reasons, real passwords should not be committed to the repository.
+
+---
+
+## 5. Restore Backend Dependencies
+
+From the `backend` folder:
 
 ```powershell
 dotnet restore
 ```
 
-This command downloads the project's required dependencies.
+---
 
-### 7. Apply Database Migrations
-
-Run:
+## 6. Apply Database Migrations
 
 ```powershell
 dotnet ef database update
 ```
 
-This creates or updates the database tables using Entity Framework Core migrations.
+This creates or updates the database schema using Entity Framework Core migrations.
 
-### 8. Build the Project
+---
 
-Verify that the project builds successfully:
+## 7. Build the Backend
 
 ```powershell
 dotnet build
@@ -294,9 +633,9 @@ Expected result:
 Build succeeded.
 ```
 
-### 9. Run the API
+---
 
-Start the server:
+## 8. Run the API
 
 ```powershell
 dotnet run
@@ -308,21 +647,21 @@ The API will be available at:
 http://localhost:5260
 ```
 
-Do not close the terminal while the API is running.
+Keep this terminal running while using the frontend.
 
-### 10. Open Swagger
+---
 
-With the API running, open the following URL in your browser:
+# Swagger
+
+With the API running, open:
 
 ```text
 http://localhost:5260/swagger
 ```
 
-Swagger allows you to view and test the available API endpoints.
+Swagger allows the available REST API endpoints to be viewed and tested.
 
-### 11. Test the Endpoints
-
-The following operations can be tested through Swagger:
+Available endpoints:
 
 ```text
 GET     /api/Contact
@@ -332,9 +671,55 @@ PUT     /api/Contact/{id}
 DELETE  /api/Contact/{id}
 ```
 
-### Complete Setup Flow
+---
 
-For an already configured environment, the basic backend execution flow is:
+# Frontend Setup
+
+Open a second terminal.
+
+From the project root:
+
+```powershell
+cd phone-book-technical-test
+```
+
+Navigate to the frontend:
+
+```powershell
+cd frontend
+```
+
+---
+
+## 1. Install Dependencies
+
+```powershell
+npm install
+```
+
+---
+
+## 2. Run Angular
+
+```powershell
+ng serve
+```
+
+The Angular application will be available at:
+
+```text
+http://localhost:4200
+```
+
+Open that URL in your browser.
+
+---
+
+# Complete Setup Flow
+
+For a new environment, the basic execution flow is:
+
+### Terminal 1 — Backend
 
 ```powershell
 cd phone-book-technical-test
@@ -345,10 +730,84 @@ dotnet build
 dotnet run
 ```
 
-Then open:
+Backend:
+
+```text
+http://localhost:5260
+```
+
+Swagger:
 
 ```text
 http://localhost:5260/swagger
 ```
 
+### Terminal 2 — Frontend
 
+```powershell
+cd phone-book-technical-test
+cd frontend
+npm install
+ng serve
+```
+
+Frontend:
+
+```text
+http://localhost:4200
+```
+
+---
+
+# Git Workflow
+
+The project was developed using separate branches for the main application layers.
+
+```text
+main
+  ↑
+develop
+  ↑
+feature/setup-project
+feature/setup-frontend
+```
+
+The backend and frontend were developed separately and then integrated into the main development branch.
+
+---
+
+# Technical Summary
+
+This project demonstrates a full-stack CRUD application using: 
+
+```text
+Angular
+   ↓
+REST API
+   ↓
+ASP.NET Core
+   ↓
+Entity Framework Core
+   ↓
+PostgreSQL
+```
+
+The application implements:
+
+* Full CRUD operations
+* REST API
+* PostgreSQL persistence
+* Entity Framework Core
+* Layered backend architecture
+* Angular frontend
+* Bootstrap styling
+* ng-bootstrap modals
+* Contact type filtering
+* Pagination
+* Frontend validation
+* Backend validation
+* Duplicate email validation
+* Soft delete
+* Swagger/OpenAPI documentation
+* CORS configuration
+* Git/GitHub workflow

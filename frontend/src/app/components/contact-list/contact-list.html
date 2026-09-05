@@ -1,0 +1,257 @@
+<div class="container mt-4">
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Phone Book</h1>
+
+    <button
+    class="btn btn-primary"
+    (click)="openAddModal()">
+    + Add Contact
+    </button>
+</div>
+
+
+<!-- Contact type filters -->
+<div class="mb-3">
+
+    <label class="form-label fw-bold">
+    Contact type
+    </label>
+
+    <div class="d-flex gap-3">
+
+    <!-- Person -->
+    <div class="form-check">
+
+        <input
+        #personFilter
+        class="form-check-input"
+        type="checkbox"
+        id="personFilter"
+        checked
+        (change)="toggleFilter('Person', personFilter.checked)"
+        >
+
+        <label
+        class="form-check-label"
+        for="personFilter">
+        Person
+        </label>
+
+    </div>
+
+
+    <!-- Public Organization -->
+    <div class="form-check">
+
+        <input
+        #publicFilter
+        class="form-check-input"
+        type="checkbox"
+        id="publicFilter"
+        checked
+        (change)="toggleFilter(
+            'PublicOrganization',
+            publicFilter.checked
+        )"
+        >
+
+        <label
+        class="form-check-label"
+        for="publicFilter">
+        Public Organization
+        </label>
+
+    </div>
+
+
+    <!-- Private Organization -->
+    <div class="form-check">
+
+        <input
+        #privateFilter
+        class="form-check-input"
+        type="checkbox"
+        id="privateFilter"
+        checked
+        (change)="toggleFilter(
+            'PrivateOrganization',
+            privateFilter.checked
+        )"
+        >
+
+        <label
+        class="form-check-label"
+        for="privateFilter">
+        Private Organization
+        </label>
+
+    </div>
+
+    </div>
+
+</div>
+
+
+<!-- Loading message -->
+@if (loading) {
+
+    <div class="alert alert-info">
+    Loading contacts...
+    </div>
+
+}
+
+
+<!-- Error message -->
+@if (errorMessage) {
+
+    <div class="alert alert-danger">
+    {{ errorMessage }}
+    </div>
+
+}
+
+
+<!-- No contacts -->
+@if (!loading && filteredContacts.length === 0) {
+
+    <div class="alert alert-secondary">
+    No contacts found.
+    </div>
+
+}
+
+
+<!-- Contacts table -->
+@if (!loading && filteredContacts.length > 0) {
+
+    <div class="table-responsive">
+
+    <table class="table table-striped table-bordered align-middle">
+
+        <thead class="table-dark">
+
+        <tr>
+
+            <th>Contact Type</th>
+            <th>Name</th>
+            <th>Last Name</th>
+            <th>Phone Number</th>
+            <th>Comments</th>
+            <th>Email</th>
+            <th>Government Level</th>
+            <th>Industry</th>
+            <th>Edit</th>
+            <th>Delete</th>
+
+        </tr>
+
+        </thead>
+
+
+        <tbody>
+
+        @for (contact of paginatedContacts; track contact.id) {
+
+            <tr>
+
+            <td>
+                {{ contact.contactType }}
+            </td>
+
+            <td>
+                {{ contact.name }}
+            </td>
+
+            <td>
+                {{ contact.lastName || 'N/A' }}
+            </td>
+
+            <td>
+                {{ contact.phoneNumber }}
+            </td>
+
+            <td>
+                {{ contact.comments || 'N/A' }}
+            </td>
+
+            <td>
+                {{ contact.email || 'N/A' }}
+            </td>
+
+            <td>
+                {{ contact.governmentLevel || 'N/A' }}
+            </td>
+
+            <td>
+                {{ contact.industry || 'N/A' }}
+            </td>
+
+
+            <!-- Edit -->
+            <td>
+
+                <button
+                class="btn btn-warning btn-sm"
+                (click)="openEditModal(contact)">
+                Edit
+                </button>
+
+            </td>
+
+
+            <!-- Delete -->
+            <td>
+
+                <button
+                class="btn btn-danger btn-sm"
+                (click)="openDeleteModal(contact)">
+                Delete
+                </button>
+
+            </td>
+
+            </tr>
+
+        }
+
+        </tbody>
+
+    </table>
+
+
+    <!-- Pagination -->
+    <div
+        class="d-flex justify-content-between align-items-center mt-3 mb-3">
+
+        <!-- Previous -->
+        <button
+        class="btn btn-outline-primary"
+        [disabled]="currentPage === 1"
+        (click)="changePage(currentPage - 1)">
+        Previous
+        </button>
+
+
+        <!-- Current page -->
+        <span class="fw-bold">
+        Page {{ currentPage }} of {{ totalPages }}
+        </span>
+
+
+        <!-- Next -->
+        <button
+        class="btn btn-outline-primary"
+        [disabled]="currentPage === totalPages"
+        (click)="changePage(currentPage + 1)">
+        Next
+        </button>
+
+    </div>
+
+    </div>
+
+}
+
+</div>

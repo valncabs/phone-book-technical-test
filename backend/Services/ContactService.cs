@@ -21,26 +21,37 @@ public class ContactService : IContactService
     }
 
     public async Task<Contact> CreateAsync(CreateContactDto dto)
+{
+    if (!string.IsNullOrWhiteSpace(dto.Email))
     {
-        var contact = new Contact
+        var emailExists = await _repository.EmailExistsAsync(dto.Email);
+
+        if (emailExists)
         {
-            ContactType = dto.ContactType,
-            Name = dto.Name,
-            LastName = dto.LastName,
-            PhoneNumber = dto.PhoneNumber,
-            Comments = dto.Comments,
-            Email = dto.Email,
-            GovernmentLevel = dto.GovernmentLevel,
-            Industry = dto.Industry,
-
-            Status = ContactStatus.Active,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
-
-        return await _repository.CreateAsync(contact);
+            throw new InvalidOperationException(
+                "A contact with this email already exists."
+            );
+        }
     }
 
+    var contact = new Contact
+    {
+        ContactType = dto.ContactType,
+        Name = dto.Name,
+        LastName = dto.LastName,
+        PhoneNumber = dto.PhoneNumber,
+        Comments = dto.Comments,
+        Email = dto.Email,
+        GovernmentLevel = dto.GovernmentLevel,
+        Industry = dto.Industry,
+
+        Status = ContactStatus.Active,
+        CreatedAt = DateTime.UtcNow,
+        UpdatedAt = DateTime.UtcNow
+    };
+
+    return await _repository.CreateAsync(contact);
+}
     public async Task<Contact?> GetByIdAsync(int id)
     {
         return await _repository.GetByIdAsync(id);
